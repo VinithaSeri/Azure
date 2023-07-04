@@ -31,16 +31,13 @@ pipeline {
     stage('deploy') {
       steps {
         script {
-          def resourceGroup = 'DefaultResourceGroup-EUS'
-          def webAppName = 'Azureworkshop2'
+          def resourceGroup = 'Mynewrg1'
+          def webAppName = 'mydbapps'
           
           // login Azure
-          withCredentials([usernamePassword(credentialsId: 'admin2', passwordVariable: 'AZURE_CLIENT_SECRET', usernameVariable: 'AZURE_CLIENT_ID')]) {
-            sh '''
-              az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID
-              az account set -s $AZURE_SUBSCRIPTION_ID
-            '''
-          }
+          withCredentials([azureServicePrincipal('admin2')]) {
+    sh 'az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID'
+}
           
           // get publish settings
           def pubProfilesJson = sh script: "az webapp deployment list-publishing-profiles -g $resourceGroup -n $webAppName", returnStdout: true
@@ -54,4 +51,5 @@ pipeline {
         }
       }
     }
-  
+  }
+}
