@@ -35,7 +35,7 @@ pipeline {
           def webAppName = 'mydbapps'
           
           // login Azure
-          withCredentials([azureServicePrincipal('admin2')]) {
+          withCredentials([azureServicePrincipal('admin3')]) {
     sh 'az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID'
 }
           
